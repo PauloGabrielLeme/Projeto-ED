@@ -532,7 +532,7 @@ void Pesquisa(ListaPacientes *listaPa) {
     int criterio;
     scanf("%d", &criterio);
 
-    NoArvore *raiz = NULL;
+    VerticeArvore *raiz = NULL;
     CelulaLista *atual = listaPa->primeiro;
 
     while (atual != NULL) {

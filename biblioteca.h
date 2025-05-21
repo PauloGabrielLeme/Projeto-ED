@@ -64,6 +64,8 @@ void Atendimento(ListaPacientes *listaPa, FilaAtendimento *filaPa);
 void Prioritario(ListaPacientes *listaPa, HeapPrioridade *h);
 int comparar_pacientes(const void *a, const void *b);
 void Pesquisa(ListaPacientes *listaPa);
+VerticeArvore* inserir_arvore(VerticeArvore *raiz, RegistroPa *paciente, int criterio);
+void em_ordem(VerticeArvore *raiz);
 void Desfazer();
 void Carregar(ListaPacientes *listaPa, const char *nome_arquivo);
 void Salvar(ListaPacientes *listaPa);
