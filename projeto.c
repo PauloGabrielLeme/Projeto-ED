@@ -413,9 +413,37 @@ void Desfazer(){
 void Carregar(){
 
 };
-void Salvar(){
 
-};
+void Salvar(ListaPacientes *listaPa) {
+    if (listaPa->qtde == 0 || listaPa->primeiro == NULL) {
+        printf("Nenhum paciente cadastrado para salvar.\n");
+        return;
+    }
+
+    // Usa a data do primeiro paciente como base para nome do arquivo
+    RegistroPa *p0 = listaPa->primeiro->paciente;
+    char nome_arquivo[100];
+    sprintf(nome_arquivo, "%04d-%02d-%02d.txt", p0->data->ano, p0->data->mes, p0->data->dia);
+
+    FILE *arquivo = fopen(nome_arquivo, "a");
+    if (arquivo == NULL) {
+        perror("Erro ao criar o arquivo");
+        return;
+    }
+
+    CelulaLista *atual = listaPa->primeiro;
+    while (atual != NULL) {
+        RegistroPa *p = atual->paciente;
+        fprintf(arquivo, "%s;%d;%s;%02d/%02d/%04d\n",
+                p->nome, p->idade, p->RG,
+                p->data->dia, p->data->mes, p->data->ano);
+        atual = atual->proximo;
+    }
+
+    fclose(arquivo);
+    printf("Pacientes salvos com sucesso em '%s'.\n", nome_arquivo);
+}
+
 void Sobre(){
 
 };
@@ -463,7 +491,7 @@ int main() {
                 Carregar();
                 break;
             case 7:
-                Salvar();
+                Salvar(listaPa);
                 break;
             case 8:
                 Sobre();    
