@@ -423,7 +423,7 @@ void Salvar(ListaPacientes *listaPa) {
     // Usa a data do primeiro paciente como base para nome do arquivo
     RegistroPa *p0 = listaPa->primeiro->paciente;
     char nome_arquivo[100];
-    sprintf(nome_arquivo, "%04d-%02d-%02d.txt", p0->data->ano, p0->data->mes, p0->data->dia);
+    sprintf(nome_arquivo, "Dados.txt");
 
     FILE *arquivo = fopen(nome_arquivo, "a");
     if (arquivo == NULL) {
