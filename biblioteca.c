@@ -262,15 +262,14 @@ void Atendimento(ListaPacientes *listaPa, FilaAtendimento *filaPa){
                 if(achou == 1){
                     CelulaFila *novoPaciente = criar_celulaFila(atual->paciente);
                     if(filaPa->qtde == 0){
-                        filaPa->head = novoPaciente;
+                        filaPa->head = filaPa->tail = novoPaciente;  // atualiza ambos head e tail
                         filaPa->qtde++;
-                        break;
-                    }
-                    else{
-                        filaPa->tail->proximo = novoPaciente;
+                } else {
+                        filaPa->tail->proximo = novoPaciente;        // liga o novo ao final da fila
+                        filaPa->tail = novoPaciente;                 // atualiza o novo tail
                         filaPa->qtde++;
-                        break;
-                    }
+                }
+
                 }
                 printf("Não encontrado");
                 break;
@@ -312,7 +311,7 @@ void Atendimento(ListaPacientes *listaPa, FilaAtendimento *filaPa){
                 int id = 1;
                 CelulaFila *atual = filaPa->head;
                 while(atual != NULL){
-                    printf("%d -> %s  %d anos  RG: %s cadastro realizado em: %d/%d/%d\n", id, atual->paciente->nome, atual->paciente->idade, atual->paciente->RG, atual->paciente->data->dia, atual->paciente->data->mes, atual->paciente->data->ano);
+                    printf("%d %s  %d anos  RG: %s cadastro realizado em: %d/%d/%d\n", id, atual->paciente->nome, atual->paciente->idade, atual->paciente->RG, atual->paciente->data->dia, atual->paciente->data->mes, atual->paciente->data->ano);
                     atual = atual->proximo;
                     id++;
                 }
@@ -359,8 +358,9 @@ void Prioritario(ListaPacientes *listaPa, HeapPrioridade *h) {
                     h->pacientes[h->qtde] = atual->paciente;
                     h->qtde++;
                     construir(h);
+                } else {
+                    printf("Paciente não encontrado.\n");
                 }
-                printf("Paciente não encontrado.\n");
                 break;
             }
             case 2:{
@@ -623,7 +623,6 @@ void Carregar(ListaPacientes *listaPa, const char *nome_arquivo) {
 
         free(linhas[i]); // libera memória da linha lida
     }
-
         printf("Pacientes carregados\n");
 }
 
