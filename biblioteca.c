@@ -5,6 +5,51 @@ int filho_esq(int pai) { return 2 * pai + 1; }
 int filho_dir(int pai) { return 2 * pai + 2; }
 int pai(int filho) { return (filho - 1) / 2; }
 
+VerticeArvore* inserir_arvore(VerticeArvore *raiz, RegistroPa *paciente, int criterio) {
+    if (raiz == NULL) {
+        VerticeArvore *novo = malloc(sizeof(VerticeArvore));
+        novo->paciente = paciente;
+        novo->esq = novo->dir = NULL;
+        return novo;
+    }
+
+    int valorRaiz, valorNovo;
+    switch (criterio) {
+        case 1: // Ano
+            valorRaiz = raiz->paciente->data->ano;
+            valorNovo = paciente->data->ano;
+            break;
+        case 2: // Mês
+            valorRaiz = raiz->paciente->data->mes;
+            valorNovo = paciente->data->mes;
+            break;
+        case 3: // Dia
+            valorRaiz = raiz->paciente->data->dia;
+            valorNovo = paciente->data->dia;
+            break;
+        case 4: // Idade
+            valorRaiz = raiz->paciente->idade;
+            valorNovo = paciente->idade;
+            break;
+    }
+
+    if (valorNovo < valorRaiz) {
+        raiz->esq = inserir_arvore(raiz->esq, paciente, criterio);
+    } else {
+        raiz->dir = inserir_arvore(raiz->dir, paciente, criterio);
+    }
+
+    return raiz;
+}
+
+void em_ordem(VerticeArvore *raiz) {
+    if (raiz == NULL) return;
+    em_ordem(raiz->esq);
+    RegistroPa *p = raiz->paciente;
+    printf("%s - Idade: %d - RG: %s - Data: %02d/%02d/%04d\n", p->nome, p->idade, p->RG, p->data->dia, p->data->mes, p->data->ano);
+    em_ordem(raiz->dir);
+}
+
 void peneirar(HeapPrioridade* h, int pai) {
     int maior = pai;
     int esq = filho_esq(pai);
@@ -375,7 +420,7 @@ int comparar_pacientes(const void *a, const void *b) {
 }
 
 
-void Pesquisa(ListaPacientes *listaPa) {
+void Pesquisa123(ListaPacientes *listaPa) {
     if (listaPa->qtde == 0) {
         printf("Nenhum paciente cadastrado.\n");
         return;
@@ -470,6 +515,33 @@ void Pesquisa(ListaPacientes *listaPa) {
     }
 
     free(resultados);
+}
+void Pesquisa(ListaPacientes *listaPa) {
+    if (listaPa->qtde == 0) {
+        printf("Nenhum paciente cadastrado.\n");
+        return;
+    }
+
+    printf("\n=== PESQUISA ===\n");
+    printf("1. Ordenar por ano\n");
+    printf("2. Ordenar por mês\n");
+    printf("3. Ordenar por dia\n");
+    printf("4. Ordenar por idade\n");
+    printf("Escolha uma opção: ");
+
+    int criterio;
+    scanf("%d", &criterio);
+
+    NoArvore *raiz = NULL;
+    CelulaLista *atual = listaPa->primeiro;
+
+    while (atual != NULL) {
+        raiz = inserir_arvore(raiz, atual->paciente, criterio);
+        atual = atual->proximo;
+    }
+
+    printf("\nPacientes ordenados:\n");
+    em_ordem(raiz);
 }
 
 void Desfazer(){
