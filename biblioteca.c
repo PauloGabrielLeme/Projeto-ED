@@ -360,9 +360,118 @@ void Prioritario(ListaPacientes *listaPa, HeapPrioridade *h) {
     } while (opcao != 0);
 }
 
-void Pesquisa(){
+int comparar_pacientes(const void *a, const void *b) {
+    RegistroPa *pa = *(RegistroPa**)a;
+    RegistroPa *pb = *(RegistroPa**)b;
 
-};
+    if (pa->data->ano != pb->data->ano)
+        return pa->data->ano - pb->data->ano;
+    if (pa->data->mes != pb->data->mes)
+        return pa->data->mes - pb->data->mes;
+    if (pa->data->dia != pb->data->dia)
+        return pa->data->dia - pb->data->dia;
+
+    return strcmp(pa->RG, pb->RG);
+}
+
+
+void Pesquisa(ListaPacientes *listaPa) {
+    if (listaPa->qtde == 0) {
+        printf("Nenhum paciente cadastrado.\n");
+        return;
+    }
+
+    int opcao = 0;
+    char nomeBusca[100], rgBusca[20];
+    int idadeBusca, diaBusca, mesBusca, anoBusca;
+
+    printf("Selecione:\n");
+    printf("1. Nome\n");
+    printf("2. RG\n");
+    printf("3. Idade\n");
+    printf("4. Data\n");
+    scanf("%d", &opcao);
+
+    // Aloca vetor para ponteiros filtrados
+    RegistroPa **resultados = malloc(listaPa->qtde * sizeof(RegistroPa*));
+    if (!resultados) {
+        printf("Erro de alocação.\n");
+        return;
+    }
+
+    int encontrados = 0;
+    CelulaLista *atual = listaPa->primeiro;
+
+    // Lê o valor de busca com base na opção
+    if (opcao == 1) {
+        printf("Digite o nome: ");
+        scanf(" %[^\n]", nomeBusca);
+
+        while (atual != NULL) {
+            if (strcmp(atual->paciente->nome, nomeBusca) == 0)
+                resultados[encontrados++] = atual->paciente;
+            atual = atual->proximo;
+        }
+
+    } else if (opcao == 2) {
+        printf("Digite o RG: ");
+        scanf("%s", rgBusca);
+
+        while (atual != NULL) {
+            if (strcmp(atual->paciente->RG, rgBusca) == 0)
+                resultados[encontrados++] = atual->paciente;
+            atual = atual->proximo;
+        }
+
+    } else if (opcao == 3) {
+        printf("Digite a idade: ");
+        scanf("%d", &idadeBusca);
+
+        while (atual != NULL) {
+            if (atual->paciente->idade == idadeBusca)
+                resultados[encontrados++] = atual->paciente;
+            atual = atual->proximo;
+        }
+
+    } else if (opcao == 4) {
+        printf("Digite a data (dd mm aaaa): ");
+        scanf("%d %d %d", &diaBusca, &mesBusca, &anoBusca);
+
+        while (atual != NULL) {
+            if (atual->paciente->data->dia == diaBusca &&
+                atual->paciente->data->mes == mesBusca &&
+                atual->paciente->data->ano == anoBusca) {
+                resultados[encontrados++] = atual->paciente;
+            }
+            atual = atual->proximo;
+        }
+
+    } else {
+        printf("Opção inválida.\n");
+        free(resultados);
+        return;
+    }
+
+    if (encontrados == 0) {
+        printf("Nenhum paciente encontrado.\n");
+        free(resultados);
+        return;
+    }
+
+    // Ordena os resultados encontrados
+    qsort(resultados, encontrados, sizeof(RegistroPa*), comparar_pacientes);
+
+    // Exibe os pacientes encontrados
+    printf("\n--- Pacientes encontrados ---\n");
+    for (int j = 0; j < encontrados; j++) {
+        printf("%s  %d anos  RG: %s  Cadastro: %02d/%02d/%04d\n",
+               resultados[j]->nome, resultados[j]->idade, resultados[j]->RG,
+               resultados[j]->data->dia, resultados[j]->data->mes, resultados[j]->data->ano);
+    }
+
+    free(resultados);
+}
+
 void Desfazer(){
 
 };
@@ -428,7 +537,6 @@ void Salvar(ListaPacientes *listaPa) {
         return;
     }
 
-    // Usa a data do primeiro paciente como base para nome do arquivo
     RegistroPa *p0 = listaPa->primeiro->paciente;
     char nome_arquivo[100];
     sprintf(nome_arquivo, "Dados");
@@ -451,9 +559,27 @@ void Salvar(ListaPacientes *listaPa) {
     }
 
     fclose(arquivo);
-    printf("Pacientes salvos com sucesso em '%s'.\n", nome_arquivo);
+    printf("Pacientes salvos com sucesso\n");
 }
 
 void Sobre(){
+    int e = 0;
+
+    printf("\n");
+    printf("LORENZO COLONNESE CHIGANCAS\n");
+    printf("PAULO GABRIEL GONÇALVES LEME\n");
+    printf("ALUNOS DO 4º CICLO\n");
+    printf("CIÊNCIA DA COMPUTAÇÂO\n");
+    printf("ESTRUTURA DE DADOS\n");
+    printf("20/05/2025\n\n");
+
+    printf("1. Imprimir de Novo\n");
+    printf("0. Sair\n");
+
+    scanf("%d",&e);
+
+    if(e==1){
+        Sobre();
+    }
 
 };

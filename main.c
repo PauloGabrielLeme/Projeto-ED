@@ -33,7 +33,7 @@ int main() {
                 Prioritario(listaPa, heap);
                 break;
             case 4:
-                Pesquisa();
+                Pesquisa(listaPa);
                 break;
             case 5:
                 Desfazer();
