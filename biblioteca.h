@@ -44,6 +44,12 @@ typedef struct {
     int qtde;
 } HeapPrioridade;
 
+typedef struct VerticeArvore {
+    RegistroPa *paciente;
+    struct VerticeArvore *esq;
+    struct VerticeArvore *dir;
+} VerticeArvore;
+
 int filho_esq(int pai);
 int filho_dir(int pai);
 int pai(int filho);
