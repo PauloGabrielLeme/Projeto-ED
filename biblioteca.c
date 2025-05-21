@@ -566,12 +566,12 @@ void Sobre(){
     int e = 0;
 
     printf("\n");
-    printf("LORENZO COLONNESE CHIGANCAS\n");
-    printf("PAULO GABRIEL GONÇALVES LEME\n");
-    printf("ALUNOS DO 4º CICLO\n");
-    printf("CIÊNCIA DA COMPUTAÇÂO\n");
-    printf("ESTRUTURA DE DADOS\n");
-    printf("20/05/2025\n\n");
+    printf("Nome: LORENZO COLONNESE CHIGANCAS RA: 24.223.085-2\n");
+    printf("Nome: PAULO GABRIEL GONÇALVES LEME RA: \n");
+    printf("Ciclo: ALUNOS DO 4º CICLO\n");
+    printf("Curso: CIÊNCIA DA COMPUTAÇÂO\n");
+    printf("Diciplina: ESTRUTURA DE DADOS\n");
+    printf("Data: 21/05/2025\n\n");
 
     printf("1. Imprimir de Novo\n");
     printf("0. Sair\n");
