@@ -38,9 +38,11 @@ int main() {
             case 5:
                 Desfazer();
                 break;
-            case 6:
-                Carregar();
+            case 6: {
+                char arquivo[100] = "Dados";
+                Carregar(listaPa, arquivo);
                 break;
+            }
             case 7:
                 Salvar(listaPa);
                 break;

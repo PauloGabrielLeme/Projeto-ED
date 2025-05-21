@@ -366,9 +366,61 @@ void Pesquisa(){
 void Desfazer(){
 
 };
-void Carregar(){
 
-};
+void Carregar(ListaPacientes *listaPa, const char *nome_arquivo) {
+    FILE *arquivo = fopen(nome_arquivo, "r");
+    if (arquivo == NULL) {
+        perror("Erro ao abrir o arquivo");
+        return;
+    }
+
+    char *linhas[MAX];
+    int count = 0;
+    char buffer[256];
+
+    // Lê todas as linhas e armazena em memória
+    while (fgets(buffer, sizeof(buffer), arquivo)) {
+        buffer[strcspn(buffer, "\n")] = '\0'; // remove newline
+        linhas[count] = strdup(buffer);       // copia para o array
+        count++;
+        if (count >= MAX) break;
+    }
+
+    fclose(arquivo);
+
+    // Agora percorre de trás pra frente
+    for (int i = count - 1; i >= 0; i--) {
+        RegistroPa *p = malloc(sizeof(RegistroPa));
+        p->data = malloc(sizeof(Data));
+
+        char *token = strtok(linhas[i], ";");
+        if (token != NULL) strcpy(p->nome, token);
+
+        token = strtok(NULL, ";");
+        if (token != NULL) p->idade = atoi(token);
+
+        token = strtok(NULL, ";");
+        if (token != NULL) strcpy(p->RG, token);
+
+        token = strtok(NULL, "/");
+        if (token != NULL) p->data->dia = atoi(token);
+        token = strtok(NULL, "/");
+        if (token != NULL) p->data->mes = atoi(token);
+        token = strtok(NULL, "/");
+        if (token != NULL) p->data->ano = atoi(token);
+
+        // Insere o paciente na lista
+        CelulaLista *nova = criar_celulaLista(p);
+        nova->proximo = listaPa->primeiro;
+        listaPa->primeiro = nova;
+        listaPa->qtde++;
+
+        free(linhas[i]); // libera memória da linha lida
+    }
+
+        printf("Pacientes carregados\n");
+}
+
 
 void Salvar(ListaPacientes *listaPa) {
     if (listaPa->qtde == 0 || listaPa->primeiro == NULL) {
@@ -379,13 +431,15 @@ void Salvar(ListaPacientes *listaPa) {
     // Usa a data do primeiro paciente como base para nome do arquivo
     RegistroPa *p0 = listaPa->primeiro->paciente;
     char nome_arquivo[100];
-    sprintf(nome_arquivo, "Dados.txt");
+    sprintf(nome_arquivo, "Dados");
 
-    FILE *arquivo = fopen(nome_arquivo, "a");
+    FILE *arquivo = fopen(nome_arquivo, "w");
     if (arquivo == NULL) {
         perror("Erro ao criar o arquivo");
         return;
     }
+
+    fseek(arquivo, 0, SEEK_SET); // vai para o início do arquivo
 
     CelulaLista *atual = listaPa->primeiro;
     while (atual != NULL) {

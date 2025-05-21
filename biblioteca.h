@@ -58,6 +58,6 @@ void Atendimento(ListaPacientes *listaPa, FilaAtendimento *filaPa);
 void Prioritario(ListaPacientes *listaPa, HeapPrioridade *h);
 void Pesquisa();
 void Desfazer();
-void Carregar();
+void Carregar(ListaPacientes *listaPa, const char *nome_arquivo);
 void Salvar(ListaPacientes *listaPa);
 void Sobre();
