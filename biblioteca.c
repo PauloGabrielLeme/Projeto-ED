@@ -544,9 +544,34 @@ void Pesquisa(ListaPacientes *listaPa) {
     em_ordem(raiz);
 }
 
-void Desfazer(){
+void Desfazer(FilaAtendimento* filaAtendimento) {
+    if (filaAtendimento == NULL || filaAtendimento->head == NULL) {
+        printf("Fila vazia. Nada a desfazer.\n");
+        return;
+    }
 
-};
+    char resposta;
+    printf("Tem certeza que deseja desfazer o último atendimento? (s/n): ");
+    scanf(" %c", &resposta);
+
+    if (resposta == 's' || resposta == 'S') {
+        // Remove da fila o primeiro paciente (head)
+        CelulaFila* temp = filaAtendimento->head;
+        filaAtendimento->head = temp->proximo;
+        free(temp);
+        filaAtendimento->qtde--;
+
+        if (filaAtendimento->head == NULL) {
+            filaAtendimento->tail = NULL;  // fila vazia após remoção
+        }
+
+        printf("Último atendimento removido da fila.\n");
+    } else {
+        printf("Operação cancelada.\n");
+    }
+}
+
+
 
 void Carregar(ListaPacientes *listaPa, const char *nome_arquivo) {
     FILE *arquivo = fopen(nome_arquivo, "r");

@@ -36,7 +36,7 @@ int main() {
                 Pesquisa(listaPa);
                 break;
             case 5:
-                Desfazer();
+                Desfazer(filaPa);
                 break;
             case 6: {
                 char arquivo[100] = "Dados";
